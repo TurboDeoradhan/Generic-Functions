@@ -48,7 +48,7 @@ def open_file_x(file, write):
     with open(file, 'x') as content:
         content.write(write)
     
-# If it's a CSV file.
+# If it's a CSV file. Ignores every line that starts with the second variable you pass it.
 def open_csv_r(file, ignore):
     import csv
     lines = []

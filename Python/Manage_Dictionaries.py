@@ -43,3 +43,23 @@ def dictionary_to_files(content, path):
                     inscription.write(line)
                 except Exception as e:
                     print(f'{e} occurred as a result of: {file} {line}')
+    
+# Finds duplicates in a list. Position can be set to 'full' to search each line, or a number for a specific index of each line.
+def find_duplicates(list, position='full'):
+    items = []
+    duplicates = []
+    if position == 'full':
+        for item in list:
+            if item not in items:
+                items.append(item)
+            elif item not in duplicates:
+                duplicates.append(item)
+                print(item)
+    else:
+        position = int(position)
+        for item in list:
+            if item[position] not in items:
+                items.append(item[position])
+            elif item[position] not in duplicates:
+                duplicates.append(item[position])
+                print(item[position])
