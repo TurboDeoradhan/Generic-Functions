@@ -119,3 +119,62 @@ def match_relative_path(relative_path):
     current_dir = os.getcwd()
     path = os.path.join(current_dir, relative_path)
     return path
+
+# Moves all files from Output to a "safe" folder.
+def pardon(output_path='Output', safe_path='Pardon'):
+    import os
+    import shutil
+    if output_path.lower() == 'output': # Default output folder.
+        output_path = match_relative_path(output_path)
+    file_count = len(folder_to_files(output_path)) # Check if there are already files in output.
+    if file_count > 0: 
+        if safe_path.lower() == 'pardon':
+            safe_path = match_relative_path(safe_path)
+        while os.path.exists(safe_path): # This repeats until it finds an empty safe folder.
+            safe_path = match_relative_path(f'{safe_path}#')
+        os.mkdir(safe_path)
+        shutil.move(output_path, safe_path) # This moves the files.
+        os.mkdir(output_path)
+        if file_count != 1:
+            print(f'Moved {file_count} files already in output to {safe_path}.')
+        else:
+            print(f'Moved a file already in output to {safe_path}.')
+
+# This changes file extensions. 'target' is if you only want to change specific files, otherwise set to 'all'.
+def extension_changer(new_ext, input_path='Input', output_path='Output', target='all'):
+    import os
+    import shutil
+    # Default paths:
+    if input_path.lower() == 'input':
+        input_path = match_relative_path(input_path)
+    if output_path.lower() == 'output':
+        output_path = match_relative_path(output_path)
+    pardon(output_path) # Clears output folder.
+    file_list = set(folder_to_files(input_path)) # Gets the list of files.
+    for file in file_list:
+        old_name, ext = os.path.splitext(os.path.basename(file))
+        if (ext.lower() == target.lower()) or (target.lower() == 'all'):
+            new_file = os.path.join(output_path, f'{old_name}{new_ext}') # Prepares the new file.
+            shutil.copy2(file, output_path) # Copy,
+            os.rename(os.path.join(output_path, os.path.basename(file)), new_file) # and rename.
+
+# This is for renaming files. 'position' is either 'start' or 'end' for where the new name goes in relation to the old name.
+def namer(name, input_path='Input', output_path='Output', position='end'):
+    import os
+    import shutil
+    # Default paths:
+    if input_path.lower() == 'input':
+        input_path = match_relative_path(input_path)
+    if output_path.lower() == 'output':
+        output_path = match_relative_path(output_path)
+    pardon(output_path) # Clears output folder.
+    file_list = set(folder_to_files(input_path)) # Gets the list of files.
+    for file in file_list:
+        old_name, ext = os.path.splitext(os.path.basename(file)) # Splits name from extension.
+        if position == 'start':
+            new_name = name + old_name # Adds name to the beginning of the filename.
+        elif position == 'end':
+            new_name = old_name + name # Adds name to the end of the filename.
+        new_file = os.path.join(output_path, f'{new_name}{ext}') # Prepares the new file.
+        shutil.copy2(file, output_path) # Copy,
+        os.rename(os.path.join(output_path, os.path.basename(file)), new_file) # and rename.

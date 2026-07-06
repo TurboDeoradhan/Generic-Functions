@@ -6,7 +6,7 @@ def dictionary_create(content):
         list = []
         # From the second slot to the end becomes the dictionary content.
         for item in line[1:]:
-            list.append(item)
+            list.append(item.strip())
         dictionary.update({line[0].strip() : list})
     return dictionary
 
@@ -43,7 +43,12 @@ def dictionary_to_files(content, path):
                     inscription.write(line)
                 except Exception as e:
                     print(f'{e} occurred as a result of: {file} {line}')
-    
+def flip_dictionary(dictionary):
+    flipped = {}
+    for key in dictionary:
+        for item in dictionary[key]:
+            flipped.update({item : key})
+    return flipped
 # Finds duplicates in a list. Position can be set to 'full' to search each line, or a number for a specific index of each line.
 def find_duplicates(list, position='full'):
     items = []

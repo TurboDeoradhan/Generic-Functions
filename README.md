@@ -1,2 +1,2 @@
 Package versions:
-TuPy 1.01 (11-1-2025)
+TuPy 1.03 (7-5-2026)
